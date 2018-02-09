@@ -1,0 +1,58 @@
+---
+- hosts: lxc_hosts
+
+  vars:
+
+    ansible_managed: '***** /!\ Ansible managed file, do not edit *****'
+
+    # FIXME: useless demo vars, to be removed
+    foo:
+      bar:
+       - baz
+       - qux
+
+  gather_facts: yes
+
+  pre_tasks:
+
+    # FIXME: useless debug statement, to be removed
+    - name: "Show dumb vars from {{ ansible_fqdn }}"
+      debug:
+        var: foo
+
+  tasks:
+
+    # FIXME: useless silly task, to be removed
+    - name: Create foo/bar files in /tmp
+      copy:
+        dest: "/tmp/{{ item }}"
+        content: |
+          # {{ ansible_managed }}
+          #---------------------------------------------------------------------
+          # /tmp/{{ item }}
+          {{ foo }}
+      with_items: "{{ foo.bar }}"
+      notify: Touch foo/bar files in /tmp
+
+    # TODO: install HTTP server
+    # TODO: configure dhcp00X.local vhost with dhcp00X.local in HomePage
+    # TODO: install SMTP server listening on 127.0.0.1:25
+    # TODO: configure STMP relay to gateway (10.20.30.1) for local accounts
+
+  post_tasks:
+
+    # FIXME: useless silly post task, to be removed
+    - name: Remove foo/bar files in /tmp
+      file:
+        dest: "/tmp/{{ item }}"
+        state: absent
+      with_items: "{{ foo.bar }}"
+
+  handlers:
+
+    # FIXME: useless handler, to be removed
+    - name: Touch foo/bar files in /tmp
+      file:
+        path: "/tmp/{{ item }}"
+        state: touch
+      with_items: "{{ foo.bar }}"

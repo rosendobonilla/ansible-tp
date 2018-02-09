@@ -12,8 +12,7 @@
   tasks:
     - name: Installation apache2
       apt: 
-        name: apache2
-    
+        name: apache2 curl 
     #- notify: Installation reussite
     # TODO: configure dhcp00X.local vhost with dhcp00X.local in HomePage
     # TODO: install SMTP server listening on 127.0.0.1:25

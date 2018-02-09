@@ -85,7 +85,7 @@ validate: ## Validate playbook.yml
 	@ssh $(ops_ssh_opts) -t sandbox \
 		'for index in $$(seq 2 9); do \
 			echo dhcp00$${index}---------------------------------------------------; \
-			ssh dhcp00$${index} uptime; \
+			ssh dhcp00$${index} service apache2 status; \
 		done'
 	# TODO: add GET HTTP 'Accept: text/html' validation
 	# TODO: add dhcp00X.local matching HTTP response body validation

@@ -99,6 +99,12 @@ validate: ## Validate playbook.yml
 		done'
 
 	# TODO: add SMTP listening on 127.0.0.1:25 validation
+
+	@ssh $(ops_ssh_opts) -t sandbox \
+		'for index in $$(seq 2 9); do \
+			echo dhcp00$${index}---------------------------------------------------; \
+	  telnet dhcp00$${index} 25; \
+		done'
 	# TODO: add mail relay orig. to webmaster@dhcp00X.local to ops@sandbox.local
 
 reset: ## Reset ssh-agent keys

@@ -19,11 +19,11 @@
       with_items: 
         - apache2
         - curl
+        - telnet
     #Exercise 2 : Création d'un virtualhost
     - name: VirtualHost
       lineinfile:
         dest: /etc/apache2/sites-available/000-default.conf
-        regexp: "#ServerName "
         insertafter: "#ServerName " 
         line: "\tServerName {{ ansible_host }}" 
         state: present
@@ -35,12 +35,20 @@
     - name: /etc/hosts
       lineinfile:
         dest: /etc/hosts
-        line: "127.0.0i.1 {{ ansible_host }}"
+        line: "127.0.0.1 {{ ansible_host }}"
         state: present
        
     #- notify: Installation reussite
-    # TODO: configure dhcp00X.local vhost with dhcp00X.local in HomePage
     # TODO: install SMTP server listening on 127.0.0.1:25
+    - name: Hostname Postfix
+      debconf: name=postfix question="postfix/mailname" value="{{ansible_fqdn}}" vtype="string"
+    - name: option Internet Site Postfix
+      debconf: name=postfix question="postfix/main_mailer_type" value="'Internet site'" vtype="string"
+    - name: Installation de Postfix
+      apt: package={{ item }} state=installed force=yes update_cache=yes cache_valid_time=3600
+      with_items:
+        - postfix
+        - mailutils 
     # TODO: configure STMP relay to gateway (10.20.30.1) for local accounts
 
   post_tasks:

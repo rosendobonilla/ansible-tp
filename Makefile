@@ -82,13 +82,22 @@ todo:
 	@find . -type f ! -name \*~ -exec egrep '(TODO|FIXME):' {} \+ | grep -v @find
 
 validate: ## Validate playbook.yml
+	
+	# TODO: add GET HTTP 'Accept: text/html' validation
 	@ssh $(ops_ssh_opts) -t sandbox \
 		'for index in $$(seq 2 9); do \
 			echo dhcp00$${index}---------------------------------------------------; \
       ssh dhcp00$${index} service apache2 status | grep Active; \
 		done'
-	# TODO: add GET HTTP 'Accept: text/html' validation
+	# 
+	#
 	# TODO: add dhcp00X.local matching HTTP response body validation
+	@ssh $(ops_ssh_opts) -t sandbox \
+		'for index in $$(seq 2 9); do \
+			echo dhcp00$${index}---------------------------------------------------; \
+	  curl http://dhcp00$${index}.local/; \
+		done'
+
 	# TODO: add SMTP listening on 127.0.0.1:25 validation
 	# TODO: add mail relay orig. to webmaster@dhcp00X.local to ops@sandbox.local
 
